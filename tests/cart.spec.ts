@@ -1,14 +1,11 @@
 import {test} from '@playwright/test'
-import LoginPage from '../pages/LoginPage'
 import CartPage from '../pages/CartPage'
-import {users,products} from '../utils/testData'
-
+import {products} from '../utils/testData'
+test.beforeEach('View and Delete product From Cart',async({page})=>{
+    await page.goto('https://www.demoblaze.com/')
+})
 test('View Cart and Delete Product',async({page})=>{
-    const loginPage=new LoginPage(page)
     const cartPage=new CartPage(page)
-    await loginPage.navigateToHomePage()
-    await loginPage.login(users.validUser.username,users.validUser.password)
-    //await loginPage.verifySuccessfulLogin()
     await cartPage.ViewCartPage()
     await cartPage.verifyProductInCart(products[0].productName)
     await cartPage.deleteProduct(products[0].productName)

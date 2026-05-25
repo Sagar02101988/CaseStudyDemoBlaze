@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-
+export const STORAGE_STATE='auth/user.json'
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -13,7 +13,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
-  timeout:3000,
+  timeout:60000,
   
   /* Run tests in files in parallel */
   fullyParallel: false,
@@ -40,11 +40,23 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'],
-        baseURL:'https://www.demoblaze.com/'
-       },
+      name:'setup',
+      testMatch:'**/*.setup.ts'
     },
+    {
+      name:'ItemSearch',
+      testMatch:'**/*addToCart.spec.ts',
+      dependencies:['setup'],
+      use: { ...devices['Desktop Chrome'],
+        storageState:STORAGE_STATE
+       }
+    },
+    // {
+    //   name: 'chromium',
+    //   use: { ...devices['Desktop Chrome'],
+    //     baseURL:'https://www.demoblaze.com/'
+    //    },
+    // },
 
     // {
     //   name: 'firefox',
